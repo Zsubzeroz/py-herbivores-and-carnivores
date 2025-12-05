@@ -1,7 +1,7 @@
-from typing import List
+from typing import Union
 
 class Animal:
-    alive: List["Animal"] = []
+    alive: list["Animal"] = []
 
     def __init__(self, name: str) -> None:
         self.name = name
@@ -17,9 +17,8 @@ class Herbivore(Animal):
         self.hidden = not self.hidden
 
 class Carnivore(Animal):
-    def bite(self, target: Animal) -> None:
-        # Verifica se é Herbivoro, se não está escondido E se ainda está vivo
-        if isinstance(target, Herbivore) and not target.hidden and target in Animal.alive:
+    def bite(self, target: Union[Animal, "Herbivore"]) -> None:
+        if isinstance(target, Herbivore) and not target.hidden:
             target.health -= 50
-            if target.health <= 0:
+            if target.health <= 0 and target in Animal.alive:
                 Animal.alive.remove(target)
